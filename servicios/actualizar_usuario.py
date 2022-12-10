@@ -1,3 +1,9 @@
+#esperar cliente, recibir data
+#recibe datos: "rut", "meses"
+#verifica si existe rut en bdd tabla "usuarios"
+#si existe rut se agregan "meses" a "fecha_caducidad" || si no existe rut se agrega entrada a tabla "usuarios" con "rut" y "fecha_caducidad" segun "meses"
+#retornar confirmacion de actualizacion
+
 import socket, sys, json
 import os
 from bdd import connectDb
