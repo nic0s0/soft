@@ -9,7 +9,6 @@ import os
 from bdd import connectDb
 import hashlib
 
-
 collection=connectDb()["usuarios"]
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -35,7 +34,8 @@ while True:
             data = json.loads(data)
             print('received {!r}',data)
             #VER COMO SE MANEJA LA FECHA
-            post={"nombre":data["nombre"],"rut":data["rut"], fecha, "meses":data["meses"]}
+            fecha = "2021-05-05"
+            post={"nombre":data["nombre"],"rut":data["rut"], "fecha":fecha, "meses":data["meses"]}
             collection.insert_one(post)            
             print('ESTES ES X: ',post)
             messs = '2'
