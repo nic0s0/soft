@@ -5,9 +5,8 @@
 #retornar confirmacion de actualizacion
 
 import socket, sys, json
-import os
 from bdd import connectDb
-import hashlib
+from datetime import datetime
 
 collection=connectDb()["usuarios"]
 
@@ -34,7 +33,8 @@ while True:
             data = json.loads(data)
             print('received {!r}',data)
             #VER COMO SE MANEJA LA FECHA
-            fecha = "2021-05-05"
+            now = datetime.now()
+            fecha = now.strftime("%Y-%m-%d")
             post = {"nombre":data["nombre"],"rut":data["rut"], "fecha":fecha, "meses":data["meses"]}
             collection.insert_one(post)            
             print('ESTES ES X: ',post)
