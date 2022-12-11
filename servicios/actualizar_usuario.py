@@ -35,7 +35,7 @@ while True:
             print('received {!r}',data)
             #VER COMO SE MANEJA LA FECHA
             fecha = "2021-05-05"
-            post={"nombre":data["nombre"],"rut":data["rut"], "fecha":fecha, "meses":data["meses"]}
+            post = {"nombre":data["nombre"],"rut":data["rut"], "fecha":fecha, "meses":data["meses"]}
             collection.insert_one(post)            
             print('ESTES ES X: ',post)
             messs = '2'
