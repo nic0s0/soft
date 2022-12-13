@@ -15,9 +15,9 @@ def calculo_estado(fecha_caducidad):
     fecha_actual = datetime.strptime(fecha_actual, "%Y-%m-%d")
 
     if fecha_actual > fecha_caducidad:
-        return "Vencida"
+        return ["Vencida", fecha_caducidad]
     else:
-        return "Activa"
+        return ["Activa", fecha_caducidad]
 
 collection=connectDb()["usuarios"]
 
@@ -47,7 +47,7 @@ while True:
             query = collection.find(post)
             for x in query:
                 print('ESTES ES X: ',post)
-                estado = calculo_estado(x["fecha"])
+                estado = calculo_estado(x["fecha_caducidad"])
 
             messs = '2'
             if post != None:

@@ -32,7 +32,7 @@ while True:
             data = json.loads(data)
             print('received {!r}',data)
             post = {"rut":data["rut"], "id_libro":data["id_libro"]}
-            collection.delete_one(post)            
+            collection.delete_one(post)
             print('ESTES ES X: ',post)
             messs = '2'
             if post != None:

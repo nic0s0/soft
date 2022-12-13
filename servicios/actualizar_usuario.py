@@ -7,6 +7,22 @@
 import socket, sys, json
 from bdd import connectDb
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
+def actualizar_usuario(data):
+    if collection.find_one({"rut":data["rut"]}) != None:
+        print('usuario existe')
+        fecha = collection.find_one({"rut":data["rut"]})["fecha_caducidad"]
+        fecha = fecha + relativedelta(months=int(data["meses"]))
+        collection.update_one({"rut":data["rut"]},{"$set":{"fecha_caducidad":fecha}})
+        post = collection.find_one({"rut":data["rut"]})
+        return post
+    else:
+        now = datetime.now()
+        fecha = now + relativedelta(months=int(data["meses"]))
+        post = {"nombre":data["nombre"],"rut":data["rut"], "fecha_caducidad":fecha}
+        collection.insert_one(post)
+        return post
 
 collection=connectDb()["usuarios"]
 
@@ -32,11 +48,8 @@ while True:
             data = connection.recv(4096).decode()
             data = json.loads(data)
             print('received {!r}',data)
-            #VER COMO SE MANEJA LA FECHA
-            now = datetime.now()
-            fecha = now.strftime("%Y-%m-%d")
-            post = {"nombre":data["nombre"],"rut":data["rut"], "fecha":fecha, "meses":data["meses"]}
-            collection.insert_one(post)            
+                        
+            post = actualizar_usuario(data)
             print('ESTES ES X: ',post)
             messs = '2'
             if post != None:
