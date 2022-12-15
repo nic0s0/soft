@@ -3,33 +3,17 @@
 #verifica si existe rut en bdd tabla "usuarios"
 #si existe rut se agregan "meses" a "fecha_caducidad" || si no existe rut se agrega entrada a tabla "usuarios" con "rut" y "fecha_caducidad" segun "meses"
 #retornar confirmacion de actualizacion
-
 import socket, sys, json
+import os
 from bdd import connectDb
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
+from datetime import date, timedelta, datetime
 
-def actualizar_usuario(data):
-    if collection.find_one({"rut":data["rut"]}) != None:
-        print('usuario existe')
-        fecha = collection.find_one({"rut":data["rut"]})["fecha_caducidad"]
-        fecha = fecha + relativedelta(months=int(data["meses"]))
-        collection.update_one({"rut":data["rut"]},{"$set":{"fecha_caducidad":fecha}})
-        post = collection.find_one({"rut":data["rut"]})
-        return post
-    else:
-        now = datetime.now()
-        fecha = now + relativedelta(months=int(data["meses"]))
-        post = {"nombre":data["nombre"],"rut":data["rut"], "fecha_caducidad":fecha}
-        collection.insert_one(post)
-        return post
-
-collection=connectDb()["usuarios"]
+collection = connectDb()["usuarios"]
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Bind the socket to the port
-server_address = ('localhost', 5002)
+server_address = ('localhost', 5004)
 print('starting up on {} port {}'.format(*server_address))
 sock.bind(server_address)
 
@@ -48,9 +32,19 @@ while True:
             data = connection.recv(4096).decode()
             data = json.loads(data)
             print('received {!r}',data)
-                        
-            post = actualizar_usuario(data)
-            print('ESTES ES X: ',post)
+            meses = int(data["meses"])
+            documento = collection.find_one({"rut":data["rut"]})
+            if documento != None:
+                fecha_registrada = str(documento["fecha_caducidad"])
+                fecha_caducidad1 = datetime.strptime(fecha_registrada, '%Y-%m-%d').date()
+                fecha_caducidad2 = str(fecha_caducidad1 + timedelta(days=(meses*30)))         
+                collection.update_one({"rut":data["rut"]},{"$set": {"fecha_caducidad":fecha_caducidad2}})
+                post = {"rut":data["rut"], "fecha_caducidad":fecha_caducidad2}
+            else:
+                fecha_caducidad = str(date.today() + timedelta(days=(meses*30)))
+                post = {"rut":data["rut"], "fecha_caducidad":fecha_caducidad}
+                collection.insert_one(post)            
+            print('ESTES ES X: ', post)
             messs = '2'
             if post != None:
                 print('sending data back to the client')
