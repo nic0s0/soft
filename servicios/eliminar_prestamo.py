@@ -32,9 +32,14 @@ while True:
             data = json.loads(data)
             print('received {!r}',data)
             post = {"rut":data["rut"], "id_libro":data["id_libro"]}
-            collection.delete_one(post)
-            print('ESTES ES X: ',post)
-            messs = 'Libro ' + str(data["id_libro"]) + ' devuleto por ' + str(data["rut"])
+            query = collection.find_one(post)
+            if query:
+                collection.delete_one(post)
+                print('ESTES ES X: ',post)
+                messs = 'Libro ' + str(data["id_libro"]) + ' devuleto por ' + str(data["rut"])
+            else:
+                post = {"rut":data["rut"]}
+                messs = 'Prestamo sin registro en el sistema'
             if post != None:
                 print('sending data back to the client')
                 connection.sendall(messs.encode())

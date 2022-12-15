@@ -32,23 +32,26 @@ while True:
             data = json.loads(data)
             print('received {!r}',data)
             post = {"rut":data["rut"], "id_libro":data["id_libro"]}
-            query = collection.find(post)
+            query = collection.find_one(post)
             fecha_devolucion = None
-            for x in query:
-                print('ESTES ES X: ',x)
-                fecha_devolucion = x["fecha_devolucion"]
+            if query:    
+                print('ESTES ES X: ',query)
+                fecha_devolucion = query["fecha_devolucion"]
                 fecha_devolucion = datetime.strptime(fecha_devolucion, '%Y-%m-%d')
-            atraso_total = datetime.now() - fecha_devolucion 
-            atraso_total = atraso_total.days
-            if atraso_total < 0:
-                atraso_total = 0
-                messs = str({"atraso_total":str(atraso_total), "fecha_devolucion":str(fecha_devolucion)}).replace("'",'"').encode()
+
+                atraso_total = datetime.now() - fecha_devolucion 
+                fecha_devolucion = str(fecha_devolucion).replace(" 00:00:00","")
+                atraso_total = atraso_total.days
+                if atraso_total < 0:
+                    atraso_total = 0
+                    messs = "El libro "+str(data["id_libro"])+" se devuelve el "+str(fecha_devolucion)
+                else:
+                    messs = "El libro "+str(data["id_libro"])+" tiene "+str(atraso_total)+" dias de atraso, debe pagar $"+str(1000*atraso_total)
             else:
-                messs = str({"atraso_total":str(atraso_total), "fecha_devolucion":str(fecha_devolucion), "deuda":str(1000*atraso_total)}).replace("'",'"').encode()
-                
+                messs = 'Libro no prestado a este usuario'
             if post != None:
                 print('sending data back to the client')
-                connection.sendall(messs)
+                connection.sendall(messs.encode())
                 break
             else:
                 print('no data from', client_address)

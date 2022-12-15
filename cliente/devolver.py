@@ -10,13 +10,11 @@ def Devolver():
 
     # Connect the socket to the port where the server is listening
     server_address = ('localhost', 5006)
-    print('connecting to {} port {}'.format(*server_address))
+    #print('\nconnecting to {} port {}\n'.format(*server_address))
     sock.connect(server_address)
     
-    print("Ingrese RUT")
-    rut = input()
-    print("Ingrese ID de libro")
-    id_libro = input()
+    rut = input("Ingrese RUT: ")
+    id_libro = input("Ingrese ID del libro: ")
 
     post = str({'rut':rut, 'id_libro': id_libro}).replace("'", '"').encode()
     
@@ -28,9 +26,8 @@ def Devolver():
         while amount_received < amount_expected:
             data = sock.recv(4096)
             amount_received += len(data)
-            print('received {!r}'.format(data))
+            print('\n'+data.decode("utf-8")+'\n')
             return data.decode("utf-8")
     finally:
-        print('closing socket')
         sock.close()
         

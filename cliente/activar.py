@@ -10,7 +10,7 @@ def Activar():
 
     # Connect the socket to the port where the server is listening
     server_address = ('localhost', 5004)
-    print('connecting to {} port {}'.format(*server_address))
+    #print('\nconnecting to {} port {}\n'.format(*server_address))
     sock.connect(server_address)
     
     rut = input("Ingrese RUT: ")
@@ -26,7 +26,8 @@ def Activar():
         while amount_received < amount_expected:
             data = sock.recv(4096)
             amount_received += len(data)
-            print('\n{!r}\n'.format(data))
+            print('\n'+data.decode("utf-8")+'\n')
+            #print('\n{!r}\n'.format(data))
             return data.decode("utf-8")
     finally:
         sock.close()

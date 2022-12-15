@@ -9,16 +9,17 @@ import sys, json
 
 def Consultar_atraso():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    usuario = input("Ingrese RUT: ")
-    id = input("Ingrese Identificador del libro: ")
-    print(f"RUT: {usuario}, Libro: {id}")
-    post = str({'rut': usuario, 'id_libro': id}).replace("'",'"').encode()
     
     # Connect the socket to the port where the server is listening
     server_address = ('localhost', 5002)
-    print('connecting to {} port {}'.format(*server_address))
+    #print('connecting to {} port {}'.format(*server_address))
     sock.connect(server_address)
+
+    usuario = input("Ingrese RUT: ")
+    id = input("Ingrese ID del libro: ")
+
+    post = str({'rut': usuario, 'id_libro': id}).replace("'",'"').encode()
+    
     try: 
         sock.sendall(post)
         amount_received = 0
@@ -27,8 +28,7 @@ def Consultar_atraso():
         while amount_received < amount_expected:
             data = sock.recv(4096)
             amount_received += len(data)
-            print('\n{!r}\n'.format(data))
-            return data.decode("utf-8"), usuario
+            print('\n'+data.decode("utf-8")+'\n')
+            return data.decode("utf-8")
     finally:
-        print('closing socket')
         sock.close()

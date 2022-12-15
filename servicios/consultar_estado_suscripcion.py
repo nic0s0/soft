@@ -15,10 +15,10 @@ def calculo_estado(fecha_caducidad):
     fecha_actual = datetime.strptime(fecha_actual, "%Y-%m-%d")
 
     if fecha_actual > fecha_caducidad:
-        messs = str({"estado":"Vencida", "fecha_caducidad":str(fecha_caducidad)}).replace("'",'"').encode()
+        messs = ["Vencida", str(fecha_caducidad)]
         return messs
     else:
-        messs = str({"estado":"Activa", "fecha_caducidad":str(fecha_caducidad)}).replace("'",'"').encode()
+        messs = ["Activa", str(fecha_caducidad)]
         return messs
 
 collection=connectDb()["usuarios"]
@@ -46,15 +46,22 @@ while True:
             data = json.loads(data)
             print('received {!r}',data)
             post = {"rut":data["rut"]}
-            query = collection.find(post)
+            query = collection.find_one(post)
             estado = None
-            for x in query:
-                print('ESTES ES X: ',x)
-                estado = calculo_estado(x["fecha_caducidad"])
+            if query:
+                print('ESTES ES X: ', query)
+                estado = calculo_estado(query["fecha_caducidad"])
+                if estado[0] == "Vencida":
+                    messs = "Suscripcion vencida el " + estado[1]
+                elif estado[0] == "Activa":
+                    messs = "Suscripcion activa hasta el " + estado[1]
+            else:
+                messs = 'Usuario no registrado en el sistema'
+
             if post != None:
                 print('sending data back to the client')
-                print(estado)
-                connection.sendall(estado)
+                print(messs)
+                connection.sendall(messs.encode())
                 break
             else:
                 print('no data from', client_address)

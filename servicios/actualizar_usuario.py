@@ -40,12 +40,13 @@ while True:
                 fecha_caducidad2 = str(fecha_caducidad1 + timedelta(days=(meses*30)))         
                 collection.update_one({"rut":data["rut"]},{"$set": {"fecha_caducidad":fecha_caducidad2}})
                 post = {"rut":data["rut"], "fecha_caducidad":fecha_caducidad2}
+                messs = 'Usuario '+data["rut"]+' actualizado hasta '+fecha_caducidad2
             else:
                 fecha_caducidad = str(date.today() + timedelta(days=(meses*30)))
                 post = {"rut":data["rut"], "fecha_caducidad":fecha_caducidad}
                 collection.insert_one(post)            
+                messs = 'Usuario '+data["rut"]+' actualizado hasta '+fecha_caducidad
             print('ESTES ES X: ', post)
-            messs = 'Usuario '+data["rut"]+' actualizado'
             if post != None:
                 print('sending data back to the client')
                 connection.sendall(messs.encode())

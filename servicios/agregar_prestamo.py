@@ -8,6 +8,7 @@ from bdd import connectDb
 from datetime import date, timedelta
 
 collection = connectDb()["prestamos"]
+usuarios = connectDb()["usuarios"]
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -33,10 +34,18 @@ while True:
             data = json.loads(data)
             print('received {!r}',data)
             fecha_caducidad = str(date.today() + timedelta(days=30))
-            post = {"rut":data["rut"], "id_libro":data["id_libro"], "fecha_devolucion":fecha_caducidad}
-            collection.insert_one(post)            
-            print('ESTES ES X: ', post)
-            messs = 'Libro ' + str(data["id_libro"]) + ' prestado a ' + str(data["rut"]) + ' hasta ' + fecha_caducidad
+        
+            usuario = usuarios.find_one({"rut":data["rut"]})
+            print('usuario: ', usuario)
+            if usuario:
+                post = {"rut":data["rut"], "id_libro":data["id_libro"], "fecha_devolucion":fecha_caducidad}
+                collection.insert_one(post)            
+                print('ESTES ES X: ', post)
+                messs = 'Libro ' + str(data["id_libro"]) + ' prestado a ' + str(data["rut"]) + ' hasta ' + fecha_caducidad
+            else:
+                post = {"rut":data["rut"]}
+                messs = 'Usuario '+str(data["rut"])+' sin suscripcion'
+
             if post != None:
                 print('sending data back to the client')
                 connection.sendall(messs.encode())
