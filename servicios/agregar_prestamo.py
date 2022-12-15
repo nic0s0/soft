@@ -5,9 +5,9 @@
 import socket, sys, json
 import os
 from bdd import connectDb
-import hashlib
+from datetime import date, timedelta
 
-collection=connectDb()["prestamos"]
+collection = connectDb()["prestamos"]
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -31,9 +31,10 @@ while True:
             data = connection.recv(4096).decode()
             data = json.loads(data)
             print('received {!r}',data)
-            post={"rut":data["rut"], "id_libro":data["id_libro"], "fecha_caducidad":data["fecha_caducidad"]}
+            fecha_caducidad = str(date.today() + timedelta(days=30))
+            post = {"rut":data["rut"], "id_libro":data["id_libro"], "fecha_caducidad":fecha_caducidad}
             collection.insert_one(post)            
-            print('ESTES ES X: ',post)
+            print('ESTES ES X: ', post)
             messs = '2'
             if post != None:
                 print('sending data back to the client')
