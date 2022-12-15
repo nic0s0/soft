@@ -5,6 +5,7 @@
 
 import socket, sys, json
 from bdd import connectDb
+from datetime import datetime, timedelta
 
 collection=connectDb()["prestamos"]
 
@@ -35,6 +36,10 @@ while True:
             for x in query:
                 print('ESTES ES X: ',post)
                 fecha_devolucion = x["fecha_devolucion"]
+            atraso_total = datetime.now() - fecha_devolucion 
+            atraso_total = atraso_total.days
+            if atraso_total < 0:
+                atraso_total = 0
             messs = '2'
             if post != None:
                 print('sending data back to the client')
