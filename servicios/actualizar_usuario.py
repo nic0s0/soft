@@ -45,7 +45,7 @@ while True:
                 post = {"rut":data["rut"], "fecha_caducidad":fecha_caducidad}
                 collection.insert_one(post)            
             print('ESTES ES X: ', post)
-            messs = '2'
+            messs = 'Usuario '+data["rut"]+' actualizado'
             if post != None:
                 print('sending data back to the client')
                 connection.sendall(messs.encode())

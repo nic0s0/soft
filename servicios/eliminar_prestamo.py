@@ -34,7 +34,7 @@ while True:
             post = {"rut":data["rut"], "id_libro":data["id_libro"]}
             collection.delete_one(post)
             print('ESTES ES X: ',post)
-            messs = '2'
+            messs = 'Libro ' + str(data["id_libro"]) + ' devuleto por ' + str(data["rut"])
             if post != None:
                 print('sending data back to the client')
                 connection.sendall(messs.encode())

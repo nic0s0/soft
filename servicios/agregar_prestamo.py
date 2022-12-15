@@ -28,14 +28,15 @@ while True:
 
         # Receive the data in small chunks and retransmit it
         while True:
+
             data = connection.recv(4096).decode()
             data = json.loads(data)
             print('received {!r}',data)
             fecha_caducidad = str(date.today() + timedelta(days=30))
-            post = {"rut":data["rut"], "id_libro":data["id_libro"], "fecha_caducidad":fecha_caducidad}
+            post = {"rut":data["rut"], "id_libro":data["id_libro"], "fecha_devolucion":fecha_caducidad}
             collection.insert_one(post)            
             print('ESTES ES X: ', post)
-            messs = '2'
+            messs = 'Libro ' + str(data["id_libro"]) + ' prestado a ' + str(data["rut"]) + ' hasta ' + fecha_caducidad
             if post != None:
                 print('sending data back to the client')
                 connection.sendall(messs.encode())

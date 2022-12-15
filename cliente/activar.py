@@ -13,10 +13,8 @@ def Activar():
     print('connecting to {} port {}'.format(*server_address))
     sock.connect(server_address)
     
-    print("Ingrese RUT")
-    rut = input()
-    print("Ingrese meses")
-    meses = input()
+    rut = input("Ingrese RUT: ")
+    meses = input("Ingrese meses de suscripción: ")
 
     post = str({'rut':rut, 'meses': meses}).replace("'", '"').encode()
     
@@ -28,9 +26,8 @@ def Activar():
         while amount_received < amount_expected:
             data = sock.recv(4096)
             amount_received += len(data)
-            print('received {!r}'.format(data))
+            print('\n{!r}\n'.format(data))
             return data.decode("utf-8")
     finally:
-        print('closing socket')
         sock.close()
         

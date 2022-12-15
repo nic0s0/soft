@@ -44,7 +44,7 @@ while True:
                 atraso_total = 0
                 messs = str({"atraso_total":str(atraso_total), "fecha_devolucion":str(fecha_devolucion)}).replace("'",'"').encode()
             else:
-                messs = str({"atraso_total":str(atraso_total), "fecha_devolucion":str(fecha_devolucion)}).replace("'",'"').encode()
+                messs = str({"atraso_total":str(atraso_total), "fecha_devolucion":str(fecha_devolucion), "deuda":str(1000*atraso_total)}).replace("'",'"').encode()
                 
             if post != None:
                 print('sending data back to the client')

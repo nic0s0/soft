@@ -27,7 +27,7 @@ def Consultar_atraso():
         while amount_received < amount_expected:
             data = sock.recv(4096)
             amount_received += len(data)
-            print('received {!r}'.format(data))
+            print('\n{!r}\n'.format(data))
             return data.decode("utf-8"), usuario
     finally:
         print('closing socket')
