@@ -12,7 +12,7 @@ collection=connectDb()["prestamos"]
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Bind the socket to the port
-server_address = ('localhost', 5010)
+server_address = ('localhost', 5002)
 print('starting up on {} port {}'.format(*server_address))
 sock.bind(server_address)
 
@@ -33,17 +33,22 @@ while True:
             print('received {!r}',data)
             post = {"rut":data["rut"], "id_libro":data["id_libro"]}
             query = collection.find(post)
+            fecha_devolucion = None
             for x in query:
-                print('ESTES ES X: ',post)
+                print('ESTES ES X: ',x)
                 fecha_devolucion = x["fecha_devolucion"]
+                fecha_devolucion = datetime.strptime(fecha_devolucion, '%Y-%m-%d')
             atraso_total = datetime.now() - fecha_devolucion 
             atraso_total = atraso_total.days
             if atraso_total < 0:
                 atraso_total = 0
-            messs = '2'
+                messs = str({"atraso_total":str(atraso_total), "fecha_devolucion":str(fecha_devolucion)}).replace("'",'"').encode()
+            else:
+                messs = str({"atraso_total":str(atraso_total), "fecha_devolucion":str(fecha_devolucion)}).replace("'",'"').encode()
+                
             if post != None:
                 print('sending data back to the client')
-                connection.sendall(messs.encode())
+                connection.sendall(messs)
                 break
             else:
                 print('no data from', client_address)
