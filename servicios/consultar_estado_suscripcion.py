@@ -15,16 +15,18 @@ def calculo_estado(fecha_caducidad):
     fecha_actual = datetime.strptime(fecha_actual, "%Y-%m-%d")
 
     if fecha_actual > fecha_caducidad:
-        return ["Vencida", fecha_caducidad]
+        messs = str({"estado":"Vencida", "fecha_caducidad":str(fecha_caducidad)}).replace("'",'"').encode()
+        return messs
     else:
-        return ["Activa", fecha_caducidad]
+        messs = str({"estado":"Activa", "fecha_caducidad":str(fecha_caducidad)}).replace("'",'"').encode()
+        return messs
 
 collection=connectDb()["usuarios"]
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Bind the socket to the port
-server_address = ('localhost', 5006)
+server_address = ('localhost', 5009)
 print('starting up on {} port {}'.format(*server_address))
 sock.bind(server_address)
 
@@ -45,14 +47,14 @@ while True:
             print('received {!r}',data)
             post = {"rut":data["rut"]}
             query = collection.find(post)
+            estado = None
             for x in query:
-                print('ESTES ES X: ',post)
+                print('ESTES ES X: ',x)
                 estado = calculo_estado(x["fecha_caducidad"])
-
-            messs = '2'
             if post != None:
                 print('sending data back to the client')
-                connection.sendall(messs.encode())
+                print(estado)
+                connection.sendall(estado)
                 break
             else:
                 print('no data from', client_address)

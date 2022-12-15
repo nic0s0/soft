@@ -7,13 +7,13 @@ import socket, pickle
 import sys, json
 
 
-def consultar_atraso():
+def Consultar_atraso():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     usuario = input("Ingrese RUT: ")
-    pw = input("Ingrese Identificador del libro: ")
-    print(f"RUT: {usuario}, Libro: {pw}")
-    post = str({'rut': usuario, 'id_libro': pw}).replace("'",'"').encode()
+    id = input("Ingrese Identificador del libro: ")
+    print(f"RUT: {usuario}, Libro: {id}")
+    post = str({'rut': usuario, 'id_libro': id}).replace("'",'"').encode()
     
     # Connect the socket to the port where the server is listening
     server_address = ('localhost', 5002)
