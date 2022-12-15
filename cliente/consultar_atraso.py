@@ -16,7 +16,7 @@ def consultar_atraso():
     post = str({'rut': usuario, 'id_libro': pw}).replace("'",'"').encode()
     
     # Connect the socket to the port where the server is listening
-    server_address = ('localhost', 5001)
+    server_address = ('localhost', 5002)
     print('connecting to {} port {}'.format(*server_address))
     sock.connect(server_address)
     try: 
