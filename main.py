@@ -1,9 +1,9 @@
 from os import system
-from cliente.activar import activar
+#from cliente.activar import activar
 from cliente.consultar_atraso import consultar_atraso
-from cliente.consultar_sus import consultar_sus
-from cliente.devolver import devolver
-from cliente.pedir import pedir
+#from cliente.consultar_sus import consultar_sus
+#from cliente.devolver import devolver
+#from cliente.pedir import pedir
 
 def main():
     system("clear")
@@ -19,7 +19,7 @@ def main():
             opcion = int(input("Ingrese una opcion: ").strip())
             if opcion == 1:
                 print("Ha seleccionado: 1. Activar cuenta")
-                x = activar()
+                #x = activar()
                 system('clear')
             elif opcion == 2:
                 print("Ha seleccionado: 2. Consultar atraso de libro")
@@ -27,15 +27,15 @@ def main():
                 system('clear')
             if opcion == 3:
                 print("Ha seleccionado: 3. Consultar estado de suscripcion")
-                x = consultar_sus()
+                #x = consultar_sus()
                 system('clear')
             if opcion == 4:
                 print("Ha seleccionado: 4. Devolver un libro")
-                x = devolver()
+                #x = devolver()
                 system('clear')
             if opcion == 5:
                 print("Ha seleccionado: 5. Pedir un libro")
-                x = pedir()
+                #x = pedir()
                 system('clear')            
             elif opcion == 6:
                 print("Saliendo")

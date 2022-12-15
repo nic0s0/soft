@@ -7,7 +7,7 @@ import socket, pickle
 import sys, json
 
 
-def Login():
+def consultar_atraso():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     usuario = input("Ingrese RUT: ")
